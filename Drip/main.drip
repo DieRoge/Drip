@@ -1,7 +1,7 @@
-brew order fact |> 
-    order brew n ~> 
-        aroma n == 0 
-            hot 1 
-            iced n * (fact (n - 1)) 
+# Это приветственная программа на Drip
+brew order hello |> 
+    order brew name ~> 
+        pour ("Hello, " + name) # Склеиваем строки
 serve 
-    pour (fact 5)
+    brew order val |> sip serve # Ждем ввода от пользователя
+    hello val

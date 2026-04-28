@@ -8,7 +8,10 @@ let rec eval (env: Map<string, Value>) expr =
         match v with
         | :? int as i -> VInt i
         | :? bool as b -> VBool b
+        | :? string as s -> VStr s
         | _ -> failwith "Unknown constant"
+    
+    | Sip -> VStr(System.Console.ReadLine())
     
     | Variable(name) -> 
         match env.TryFind name with
@@ -20,6 +23,7 @@ let rec eval (env: Map<string, Value>) expr =
         match v with
         | VInt i -> printfn "=> %d" i
         | VBool b -> printfn "=> %b" b
+        | VStr s -> printfn "=> %s" s
         | _ -> printfn "=> %A" v
         v
 
@@ -64,4 +68,5 @@ let rec eval (env: Map<string, Value>) expr =
             | "*" -> VInt(a * b)
             | "==" -> VBool(a = b)
             | _ -> failwithf "Unknown operator: %s" op
+        | VStr a, VStr b when op = "+" -> VStr(a + b)
         | _ -> failwith "Math requires Espresso (integers)"
