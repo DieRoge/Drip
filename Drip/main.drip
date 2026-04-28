@@ -1,7 +1,16 @@
-# Это приветственная программа на Drip
-brew order hello |> 
-    order brew name ~> 
-        pour ("Hello, " + name) # Склеиваем строки
-serve 
-    brew order val |> sip serve # Ждем ввода от пользователя
-    hello val
+# Программа проверки ввода-вывода и логики
+pour "Добро пожаловать в кофейню Drip!" serve
+
+pour "Как вас зовут?" serve
+brew name |> sip serve
+    pour ("Рад познакомиться, " + name) serve
+    
+    pour "Что выберете: Coffee или Tea?" serve
+    brew order_choice |> sip serve
+        aroma order_choice == "Coffee"
+            hot (pour "Ваш эспрессо почти готов!")
+            iced (
+                aroma order_choice == "Tea"
+                    hot (pour "Завариваем лучший листовой чай.")
+                    iced (pour "Извините, " + (order_choice + " у нас закончилось."))
+            )
