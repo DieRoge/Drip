@@ -1,0 +1,7 @@
+brew order fact |> 
+    order brew n ~> 
+        aroma n == 0 
+            hot 1 
+            iced n * (fact (n - 1)) 
+serve 
+    pour (fact 5)

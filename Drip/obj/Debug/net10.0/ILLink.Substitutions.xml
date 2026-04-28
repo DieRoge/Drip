@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+  <assembly fullname="drip">
+    <resource name="FSharpSignatureData.drip" action="remove"></resource>
+    <resource name="FSharpSignatureCompressedData.drip" action="remove"></resource>
+    <resource name="FSharpSignatureDataB.drip" action="remove"></resource>
+    <resource name="FSharpSignatureCompressedDataB.drip" action="remove"></resource>
+    <resource name="FSharpOptimizationData.drip" action="remove"></resource>
+    <resource name="FSharpOptimizationCompressedData.drip" action="remove"></resource>
+    <resource name="FSharpOptimizationDataB.drip" action="remove"></resource>
+    <resource name="FSharpOptimizationCompressedDataB.drip" action="remove"></resource>
+    <resource name="FSharpOptimizationInfo.drip" action="remove"></resource>
+    <resource name="FSharpSignatureInfo.drip" action="remove"></resource>
+  </assembly>
+</linker>

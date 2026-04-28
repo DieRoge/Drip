@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "14OmX3KI8e4=",
+  "success": true,
+  "projectFilePath": "C:\\Workspace\\FuncLog_labs\\drip\\drip.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Koval\\.nuget\\packages\\fparsec\\1.1.1\\fparsec.1.1.1.nupkg.sha512",
+    "C:\\Users\\Koval\\.nuget\\packages\\fsharp.core\\10.1.201\\fsharp.core.10.1.201.nupkg.sha512"
+  ],
+  "logs": []
+}
