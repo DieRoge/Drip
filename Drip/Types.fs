@@ -9,10 +9,13 @@ type Expr =
     | Call of Expr * Expr
     | If of Expr * Expr * Expr
     | Print of Expr
+    | Sequence of Expr * Expr
     | Sip
+    | Cast of string * Expr 
 
 type Value =
     | VInt of int
+    | VFloat of float       
     | VBool of bool
     | VStr of string
     | VClosure of string * Expr * Map<string, Value>

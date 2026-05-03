@@ -1,11 +1,10 @@
 ﻿open FParsec
 open Drip.Parser
 open Drip.Eval
-open System.IO // Для работы с файлами
+open System.IO
 
 [<EntryPoint>]
 let main argv =
-    // Проверяем, передан ли путь к файлу
     if argv.Length = 0 then
         printfn "Usage: drip <filename.drip>"
         1
@@ -17,8 +16,7 @@ let main argv =
         else
             let code = File.ReadAllText(filePath)
             
-            // Запускаем парсер
-            match run (spaces >>. pExpr .>> eof) code with
+            match run pProgram code with
             | Success(result, _, _) ->
                 try
                     eval Map.empty result |> ignore

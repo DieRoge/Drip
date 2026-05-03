@@ -1,16 +1,9 @@
-# Программа проверки ввода-вывода и логики
-pour "Добро пожаловать в кофейню Drip!" serve
+# Определяем функцию факториала
+brew fact |> order n ~> 
+    aroma n == 0
+        hot 1
+        iced n * (fact (n - 1))
 
-pour "Как вас зовут?" serve
-brew name |> sip serve
-    pour ("Рад познакомиться, " + name) serve
-    
-    pour "Что выберете: Coffee или Tea?" serve
-    brew order_choice |> sip serve
-        aroma order_choice == "Coffee"
-            hot (pour "Ваш эспрессо почти готов!")
-            iced (
-                aroma order_choice == "Tea"
-                    hot (pour "Завариваем лучший листовой чай.")
-                    iced (pour "Извините, " + (order_choice + " у нас закончилось."))
-            )
+brew a grind float |> sip
+brew b |> a / 2
+pour b
