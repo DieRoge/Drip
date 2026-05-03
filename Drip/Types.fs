@@ -5,8 +5,8 @@ type Expr =
     | Variable of string
     | BinaryOp of string * Expr * Expr
     | Assignment of string * Expr * Expr
-    | Function of string * Expr
-    | Call of Expr * Expr
+    | Function of string list * Expr  // Список имен аргументов
+    | Call of Expr * Expr list        // Список выражений-аргументов
     | If of Expr * Expr * Expr
     | Print of Expr
     | Sequence of Expr * Expr
@@ -18,5 +18,5 @@ type Value =
     | VFloat of float       
     | VBool of bool
     | VStr of string
-    | VClosure of string * Expr * Map<string, Value>
-    | VRecClosure of string * string * Expr * Map<string, Value>
+    | VClosure of string list * Expr * Map<string, Value>
+    | VRecClosure of string * string list * Expr * Map<string, Value>

@@ -30,18 +30,15 @@ let rec eval (env: Map<string, Value>) expr =
             | _ -> failwithf "Cannot grind string '%s' to int" s
         | "int", VFloat f -> VInt(int f)
         | "int", VInt i -> VInt i
-        
         | "float", VStr s ->
             let success, f = System.Double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture)
             if success then VFloat f else failwithf "Cannot grind string '%s' to float" s
         | "float", VInt i -> VFloat(float i)
         | "float", VFloat f -> VFloat f
-        
         | "str", VInt i -> VStr(string i)
         | "str", VFloat f -> VStr(f.ToString(CultureInfo.InvariantCulture))
         | "str", VBool b -> VStr(if b then "Coffee" else "Tea")
         | "str", VStr s -> VStr s
-        
         | "bool", VStr s -> VBool(s.ToLower() = "coffee" || s.ToLower() = "true")
         | "bool", VBool b -> VBool b
         | _, _ -> failwithf "Cannot grind %A to %s" v targetType
@@ -64,7 +61,7 @@ let rec eval (env: Map<string, Value>) expr =
         let v = eval env valueExpr
         let finalV = 
             match v with
-            | VClosure(p, b, cEnv) -> VRecClosure(name, p, b, cEnv)
+            | VClosure(ps, b, cEnv) -> VRecClosure(name, ps, b, cEnv)
             | _ -> v
         eval (env.Add(name, finalV)) body
 
@@ -103,12 +100,19 @@ let rec eval (env: Map<string, Value>) expr =
         | VBool false -> eval env e2
         | _ -> failwith "Aroma check failed"
 
-    | Function(p, b) -> VClosure(p, b, env)
+    | Function(ps, b) -> VClosure(ps, b, env)
 
-    | Call(fExpr, argExpr) ->
+    | Call(fExpr, argExprs) ->
         let fVal = eval env fExpr
-        let argVal = eval env argExpr
+        let argVals = argExprs |> List.map (eval env)
+        
+        let apply ps b cEnv =
+            if List.length ps <> List.length argVals then
+                failwithf "Expected %d beans, but got %d" (List.length ps) (List.length argVals)
+            let newEnv = List.fold2 (fun acc p v -> Map.add p v acc) cEnv ps argVals
+            eval newEnv b
+
         match fVal with
-        | VClosure(p, b, cEnv) -> eval (cEnv.Add(p, argVal)) b
-        | VRecClosure(fName, p, b, cEnv) -> eval (cEnv.Add(fName, fVal).Add(p, argVal)) b
+        | VClosure(ps, b, cEnv) -> apply ps b cEnv
+        | VRecClosure(fName, ps, b, cEnv) -> apply ps b (Map.add fName fVal cEnv)
         | _ -> failwith "Not a function"

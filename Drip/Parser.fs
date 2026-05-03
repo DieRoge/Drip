@@ -11,13 +11,12 @@ let keywords = [
     "order"; "sip"; "Coffee"; "Tea"; "grind"; "int"; "str"; "bool"; "float"
 ]
 
-// Исправленный pIdentifier: не потребляет ввод, если это ключевое слово
 let pIdentifier = 
     (lookAhead (identifier (IdentifierOptions())) >>= fun s -> 
         if List.contains s keywords then fail "Keyword cannot be used as an identifier"
         else identifier (IdentifierOptions())) .>> spaces
 
-let pType = choice [ token "int"; token "str"; token "bool"; token "float" ]
+let pType = choice [ token "int"; token "str"; token "bool"; token "float" ] |>> fun s -> s.Trim()
 
 let pExprRef = ref (fun (col: int64) -> fail "uninitialized" : Parser<Expr, unit>)
 let pExpr col : Parser<Expr, unit> = fun stream -> (!pExprRef col) stream
@@ -61,17 +60,26 @@ let pNumber =
         if nl.IsInteger then Constant(int32 nl.String)
         else Constant(float nl.String)
 
+// Парсер списка аргументов (через запятую)
+let pArgs = sepBy (pExpr 0L) (token ",")
+
+let hspaces = skipMany (charReturn ' ' () <|> charReturn '\t' ())
+
 let pCall =
-    pIdentifier .>>. choice [
-        between (token "(") (token ")") (spaces >>. getPosition >>= fun pos -> pBlockExact pos.Column)
-        pNumber
-        pString
-        (pIdentifier |>> Variable)
-    ] |>> (fun (f, a) -> Call(Variable f, a))
+    pIdentifier >>= fun f ->
+        choice [
+            // Вызов со скобками: func(a, b) - может занимать несколько строк
+            between (token "(") (token ")") pArgs
+            
+            // Вызов без скобок: func 5 - ЗАПРЕЩАЕМ перенос строки перед аргументом
+            (attempt (hspaces >>. pNumber) |>> fun n -> [n])
+            (attempt (hspaces >>. pString) |>> fun s -> [s])
+            // Аргумент-переменная: только если она на той же строке
+            (attempt (hspaces >>. pIdentifier) |>> fun v -> [Variable v])
+        ] .>> spaces |>> (fun args -> Call(Variable f, args))
 
 let pTerm = choice [
     attempt pCall
-    // ВАЖНО: используем pExpr 0L, а не pExprRef.Value
     attempt (token "grind" >>. pType .>>. pExpr 0L |>> Cast)
     between (token "(") (token ")") (spaces >>. getPosition >>= fun pos -> pBlockExact pos.Column)
     pNumber
@@ -95,9 +103,10 @@ let pIf col =
     token "iced" >>. pBlockGt col >>= fun e2 ->
     preturn (If(cond, e1, e2))
 
+// Поддержка списка параметров в объявлении: order a, b, c ~>
 let pFunc col = 
-    token "order" >>. pIdentifier .>> token "~>" >>= fun p ->
-    pBlockGt col |>> (fun b -> Function(p, b))
+    token "order" >>. sepBy pIdentifier (token ",") .>> token "~>" >>= fun paramsList ->
+    pBlockGt col |>> (fun b -> Function(paramsList, b))
 
 let pBrew col = 
     token "brew" >>. pIdentifier .>>. 
