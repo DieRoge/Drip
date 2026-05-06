@@ -73,7 +73,9 @@ let rec eval (env: Map<string, Value>) expr =
             match op with
             | "+" -> VInt(a + b) | "-" -> VInt(a - b)
             | "*" -> VInt(a * b) | "/" -> if b = 0 then failwith "Zero division" else VInt(a / b)
-            | "==" -> VBool(a = b) | _ -> failwith "Unknown op"
+            | "==" -> VBool(a = b) | "<" -> VBool(a < b) | ">" -> VBool(a > b) | "<=" -> VBool(a <= b) | ">=" -> VBool(a >= b) | _ -> failwith "Unknown op"
+
+
         | VFloat a, VFloat b ->
             match op with
             | "+" -> VFloat(a + b) | "-" -> VFloat(a - b)

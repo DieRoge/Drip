@@ -92,6 +92,11 @@ let pTerm = choice [
 let opp = OperatorPrecedenceParser<Expr, unit, unit>()
 opp.TermParser <- pTerm
 opp.AddOperator(InfixOperator("==", spaces, 1, Associativity.Left, fun x y -> BinaryOp("==", x, y)))
+opp.AddOperator(InfixOperator("<=", spaces, 1, Associativity.Left, fun x y -> BinaryOp("<=", x, y)))
+opp.AddOperator(InfixOperator(">=", spaces, 1, Associativity.Left, fun x y -> BinaryOp(">=", x, y)))
+opp.AddOperator(InfixOperator("<", spaces, 1, Associativity.Left, fun x y -> BinaryOp("<", x, y)))
+opp.AddOperator(InfixOperator(">", spaces, 1, Associativity.Left, fun x y -> BinaryOp(">", x, y)))
+
 opp.AddOperator(InfixOperator("+", spaces, 2, Associativity.Left, fun x y -> BinaryOp("+", x, y)))
 opp.AddOperator(InfixOperator("-", spaces, 2, Associativity.Left, fun x y -> BinaryOp("-", x, y)))
 opp.AddOperator(InfixOperator("*", spaces, 3, Associativity.Left, fun x y -> BinaryOp("*", x, y)))
