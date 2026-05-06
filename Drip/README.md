@@ -20,10 +20,14 @@
 ### Установка и запуск
 1. Склонируйте репозиторий:
    ```bash
-   git clone https://github.com/DieRoge/Drip/tree/main/Drip
-   cd drip-lang
+   git clone https://github.com/DieRoge/Drip
+   cd Drip
    ```
-2. Запустите вашу программу (файл с расширением .drip):
+2. Выполните сборку проекта, используя команду:
+```bash
+dotnet build
+```
+3. Запустите вашу программу (файл с расширением .drip):
 
 ```Bash
 dotnet run path/to/your_script.drip
