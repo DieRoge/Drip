@@ -1,0 +1,9 @@
+brew fact |> order n ~>
+    aroma n <= 1
+        hot 1
+        iced fact(n - 1) * n
+
+pour "enter your number: "
+brew num grind int |> sip
+pour "factorial of your number is:"
+pour fact(num)

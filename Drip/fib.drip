@@ -1,0 +1,11 @@
+brew fib |> order n ~>
+    aroma n == 0 hot 0
+    iced
+        aroma n == 1 hot 1
+        iced fib(n - 1) + fib(n - 2)
+
+pour "Enter your number:"
+brew num grind int |> sip
+brew str_num grind str |> num
+pour "Fibonacci for " + str_num + " is:"
+pour fib(num)

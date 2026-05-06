@@ -1,0 +1,8 @@
+brew sumTo |> order n, acc ~>
+    aroma n == 0 hot acc
+    iced sumTo(n - 1, acc + n)
+
+pour "Input your number:"
+brew num grind int |> sip
+pour "sum from 0 to your num: "
+pour sumTo(num, 0) 

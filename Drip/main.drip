@@ -1,9 +1,0 @@
-# Определяем функцию факториала
-brew fact |> order n ~> 
-    aroma n == 0
-        hot 1
-        iced n * (fact (n - 1))
-
-brew a grind float |> sip
-brew b |> a / 2
-pour b
