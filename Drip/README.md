@@ -20,7 +20,7 @@
 ### Установка и запуск
 1. Склонируйте репозиторий:
    ```bash
-   git clone [https://github.com/your-username/drip-lang.git](https://github.com/your-username/drip-lang.git)
+   git clone https://github.com/DieRoge/Drip/tree/main/Drip
    cd drip-lang
    ```
 2. Запустите вашу программу (файл с расширением .drip):
